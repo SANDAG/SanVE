@@ -404,7 +404,9 @@ Calculate4DMeasures <- function(L) {
   Bz <- L$Year$Bzone$Bzone
   #Create data frame of Bzone data
   D_df <- data.frame(L$Year$Bzone)
-  D_df$Area <- D_df$UrbanArea + D_df$TownArea + D_df$RuralArea
+  #D_df$Area <- D_df$UrbanArea + D_df$TownArea + D_df$RuralArea
+  #SANDAG-sxu add the multiplier of Square miles to Acer
+  D_df$Area <- (D_df$UrbanArea + D_df$TownArea + D_df$RuralArea)
   #Initialize list
   Out_ls <- initDataList()
 
@@ -428,6 +430,11 @@ Calculate4DMeasures <- function(L) {
     rm(Msg)
   }
   rm(IsHighDensity_, HighDensityBzones_)
+
+  #SANDAG-sxu set employment with NA to 0
+  D_df$TotEmp[is.na(D_df$TotEmp)] <- 0
+  D_df$RetEmp[is.na(D_df$RetEmp)] <- 0
+  D_df$SvcEmp[is.na(D_df$SvcEmp)] <- 0
   #Employment density
   D1C_ <- with(D_df, TotEmp / Area)
   #Activity density
@@ -460,6 +467,8 @@ Calculate4DMeasures <- function(L) {
   A_ <- rowSums(E_df)
   N_ = apply(E_df, 1, function(x) sum(x != 0))
   D2A_EPHHM_ <- -A_ / log(N_)
+  #SANDAG-sxu NA or infinity value to 0
+  D2A_EPHHM_[is.na(D2A_EPHHM_) | is.infinite(D2A_EPHHM_)] <- 0
   rm(E_df, A_, N_)
 
   #Calculate destination accessibilty term

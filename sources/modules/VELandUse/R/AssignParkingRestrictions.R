@@ -430,6 +430,10 @@ AssignParkingRestrictions <- function(L) {
     diag(Dist_BzBz) <- 0
     diag(Dist_BzBz) <- apply(Dist_BzBz, 1, function(x) min(x[x != 0]) / 2)
     #Create attraction term to determine relative attractiveness to non-work trips
+    #SANDAG-sxu change NA to 0
+    L$Year$Bzone$RetEmp[is.na(L$Year$Bzone$RetEmp)] <- 0
+    L$Year$Bzone$SvcEmp[is.na(L$Year$Bzone$SvcEmp)] <- 0
+
     Attr_Bz <- L$Year$Bzone$RetEmp + L$Year$Bzone$SvcEmp
     Attr_Bz[Attr_Bz == 0] <- 1
     #Create production term

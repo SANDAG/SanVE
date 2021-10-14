@@ -788,6 +788,8 @@ PredictHousing <- function(L) {
         Seed_BxHtIq[bx,,] <- outer(UnitDemand_BxHt[bx,], HhIqProp_BxIq[bx,])
       }
       Seed_BxHtIq[Seed_BxHtIq == 0] <- 1e-6
+      #sxu_SANDAG
+      Seed_BxHtIq[Seed_BxHtIq == "NaN"] <- 1e-6
       
       #Balance unit demand for each Bzone by unit type and income quartile
       #-------------------------------------------------------------------

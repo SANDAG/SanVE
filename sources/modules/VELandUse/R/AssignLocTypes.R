@@ -367,6 +367,11 @@ AssignLocTypes <- function(L) {
       LocType_Hh[names(LocType_Hx)] <- unname(LocType_Hx)
     }
   }
+  
+  #drop unexpected households with NA name
+  LocType_Hh <- LocType_Hh[names(LocType_Hh) != "NA"]
+  LocType_Hh <- LocType_Hh[!is.na(LocType_Hh)]
+  
   #Calculate population by Bzone and location type
   #-----------------------------------------------
   Pop_BzLt <- array(0, dim = c(length(Bz), length(Lt)), dimnames = list(Bz,Lt))
