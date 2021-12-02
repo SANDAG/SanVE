@@ -1,0 +1,30 @@
+#target_path: 'T:\ABM\ABM_FY22\RSM\VisionEval\Model\VE-R4.0.2_2020-10-21\models\SDRSPM - Copy'
+target_path: 'T:\ABM\ABM_FY22\RSM\VisionEval\Model\VE-R4.0.2_2020-10-21\models\SDRSPM'
+scenpath: 'T:\RTP\2021RP\2021rp_draft_v2\abm_runs'
+scenario_list: [[2016, '2016'], [2035, '2035build']]
+#scenario_list: [[2016, '2016']]
+road_list: [['freeway',1],['arterial',2],['other',3]]
+#road_list: [['freeway',1],['arterial',2]]
+AzoneCount: [19]
+BzoneCount: [4984]
+Marea: SD-Urban-TransitService
+#--------------------modules--------------------
+lttrkPropGrwoth: 1.3235 #  0.45/0.34, module 4.3
+autoAgeGrowth: 1.1111 #12/10.8, module 4.5
+truckAgeGrowth: 1.1429 #12/10.5, module 4.5
+VehOwnFlatRateFee.2015: [50, 0]
+VehOwnAdValoremTax: [0, 0.01]
+PaydHhProp: [0.01, 0.5]
+ave_driver_growth: [0, 1.112204795, 0.960427854, 0.960427854, 0.960427855, 0.960427854] #0 - a place holder for the year
+driverHTSBin: [1, 2, 4, 5, 8, 10, 14]
+ageBin: [0, 14, 19, 29, 54, 64, 100]
+ageLlabels: ['Under', 'DrvPerPrsn15to19','DrvPerPrsn20to29','DrvPerPrsn30to54','DrvPerPrsn55to64','DrvPerPrsn65Plus']
+azone_electricity_carbon_intensity: [153, 23]
+AveComSvcVehicleAge: 3
+ComSvcPow: [[0, 0, 0, 0, 0, 0], [0.441, 0.528, 0.031, 0.5335, 0.4572, 0.0093]]
+hvytrk_powertrain_prop: [[1, 0, 0],[0.4, 0.4, 0.2]]
+PropChargingAvail: [[1, 0, 0],[1, 0.2, 0]]
+carsvc_powertrain_prop: [[0.99, 0.01, 0, 1, 0, 0],[0.441, 0.528, 0.031, 0.5335, 0.4572, 0.0093]]
+ComSvcLtTrkProp: [0.51, 0.51]
+VehAgeCap: 13.99
+
