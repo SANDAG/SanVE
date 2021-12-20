@@ -27,4 +27,4 @@ PropChargingAvail: [[1, 0, 0],[1, 0.2, 0]]
 carsvc_powertrain_prop: [[0.99, 0.01, 0, 1, 0, 0],[0.441, 0.528, 0.031, 0.5335, 0.4572, 0.0093]]
 ComSvcLtTrkProp: [0.51, 0.51]
 VehAgeCap: 13.99
-
+VehDriScale: 1.08
