@@ -81,9 +81,10 @@ Hh_df$Dvmt[!IsMetro_] <-
 #Prepare variables for estimating trip models
 #--------------------------------------------
 #Compute household alt mode trips per year
-Hh_df$NumWalkTrp <- round(Hh_df$Nwalktrp * 52)
-Hh_df$NumBikeTrp <- round(Hh_df$Nbiketrp * 52)
-Hh_df$NumTransitTrp <- round(Hh_df$TransitTrips * 365)
+#sxu
+Hh_df$NumWalkTrp <- round(Hh_df$Nwalktrp * 52 *1.72)
+Hh_df$NumBikeTrp <- round(Hh_df$Nbiketrp * 52 * 0.95)
+Hh_df$NumTransitTrp <- round(Hh_df$TransitTrips * 365 * 1.83)
 #Set up other variables
 Hh_df$LogDvmt <- log(Hh_df$Dvmt)
 Hh_df$LogDensity <- log(Hh_df$Hbppopdn)
@@ -118,6 +119,22 @@ estimateAltModeTripModel <- function(Data_df, DepVar, IndepVars_) {
   #----------------------------------------
   #Extract the coefficients
   Coeff. <- coefficients(Model_HM)
+  #SXU update the coefficient 
+  if (DepVar == "NumBikeTrp") {
+   Coeff.["zero_BusEqRevMiPC"] = Coeff.["zero_BusEqRevMiPC"] * -2.2
+   Coeff.["zero_LogIncome"] = Coeff.["zero_LogIncome"] * 1.7
+   }
+  if (DepVar == "NumTransitTrp") {
+   Coeff.["zero_LogIncome"] = Coeff.["zero_LogIncome"] * 0.76
+   Coeff.["zero_HhSize"] = Coeff.["zero_HhSize"] * 0.6
+   Coeff.["zero_BusEqRevMiPC"] = Coeff.["zero_BusEqRevMiPC"] * 0.5
+   }
+  if (DepVar == "NumWalkTrp") {
+   Coeff.["zero_LogIncome"] = Coeff.["zero_LogIncome"] * 2
+   Coeff.["zero_HhSize"] = Coeff.["zero_HhSize"] * 2
+   Coeff.["zero_BusEqRevMiPC"] = Coeff.["zero_BusEqRevMiPC"] * -0.01
+   Coeff.["count_BusEqRevMiPC"] = Coeff.["count_BusEqRevMiPC"] * -0.2
+   }
   #Make formula string for count model
   CountCoeff. <- Coeff.[grep("count", names(Coeff.))]
   names(CountCoeff.) <- gsub("count_", "", names(CountCoeff.))
@@ -198,7 +215,7 @@ AltModeModels_ls$Metro <-
 AltModeModels_ls$NonMetro <-
   list(Walk = NonMetroWalkModel_ls,
        Bike = NonMetroBikeModel_ls,
-       Transit = NonMetroTransitModel_ls)
+       Transit = NonMetroTransitModel_ls)     
 #Save the model
 #' Alternative mode trip models
 #'
@@ -495,6 +512,10 @@ CalculateAltModeTrips <- function(L) {
   Out_ls$Year$Household$WalkTrips = calcTrips("Walk")
   Out_ls$Year$Household$BikeTrips = calcTrips("Bike")
   Out_ls$Year$Household$TransitTrips = calcTrips("Transit")
+  #SXU set BikeTrip with NA to 0
+  Out_ls$Year$Household$BikeTrips[is.na(Out_ls$Year$Household$BikeTrips)] <- 0
+  Out_ls$Year$Household$WalkTrips[is.na(Out_ls$Year$Household$WalkTrips)] <- 0
+  Out_ls$Year$Household$TransitTrips[is.na(Out_ls$Year$Household$TransitTrips)] <- 0
   Out_ls
 }
 

@@ -910,32 +910,32 @@ CalculateHouseholdDvmt <- function(L) {
   Hh_df$Intercept <- 1
 
   #Apply the average DVMT model
-  #----------------------------
+  #----------------------------SXU apply the scale factor to the DVMT:1.065
   AveDvmt_ <- numeric(NumHh)
   IsUr_ <- Hh_df$LocType == "Urban"
   AveDvmt_[IsUr_] <-
     as.vector(eval(parse(text = DvmtModel_ls$Metro$Ave),
-                   envir = Hh_df[IsUr_,])) ^ (1 / DvmtModel_ls$Metro$Pow)
+                   envir = Hh_df[IsUr_,])*1.065) ^ (1 / DvmtModel_ls$Metro$Pow)
   AveDvmt_[!IsUr_] <-
     as.vector(eval(parse(text = DvmtModel_ls$NonMetro$Ave),
-                   envir = Hh_df[!IsUr_,])) ^ (1 / DvmtModel_ls$NonMetro$Pow)
+                   envir = Hh_df[!IsUr_,])*1.065) ^ (1 / DvmtModel_ls$NonMetro$Pow)
   #Replace NaN values (model predicts below zero)
   AveDvmt_[is.na(AveDvmt_)] <- quantile(AveDvmt_[!is.na(AveDvmt_)], 0.01)
   #Limit the household DVMT to be no greater than 99th percentile for the population
   AveDvmt_[AveDvmt_ > quantile(AveDvmt_, 0.99)] <- quantile(AveDvmt_, 0.99)
 
   #Apply the 95th percentile model
-  #-------------------------------
+  #-------------------------------SXU:1.065 scale
   Hh_df$Dvmt <- AveDvmt_
   Hh_df$DvmtSq <- AveDvmt_ ^ 2
   Hh_df$DvmtCu <- AveDvmt_ ^ 3
   Dvmt95th_ <- numeric(NumHh)
   Dvmt95th_[IsUr_] <-
     as.vector(eval(parse(text = DvmtModel_ls$Metro$Pctl95),
-                   envir = Hh_df[IsUr_,]))
+                   envir = Hh_df[IsUr_,])*1.065)
   Dvmt95th_[!IsUr_] <-
     as.vector(eval(parse(text = DvmtModel_ls$NonMetro$Pctl95),
-                   envir = Hh_df[!IsUr_,]))
+                   envir = Hh_df[!IsUr_,])*1.065)
 
   #Sum the DVMT by Marea
   #--------------------
